@@ -57,10 +57,10 @@
   function playAreaBounds(){
     const r = stage.getBoundingClientRect();
     return {
-      minX: r.width * 0.60,
-      maxX: r.width * 0.93,
-      minY: r.height * 0.48,
-      maxY: r.height * 0.90
+    minX: r.width * 0.60,
+    maxX: r.width * 0.93,
+    minY: r.height * 0.62,   
+    maxY: r.height * 0.90
     };
   }
  
@@ -138,7 +138,7 @@
     biteTimerFill.style.transition = 'none';
     biteTimerFill.style.transform = 'scaleX(1)';
     void biteTimerFill.offsetWidth;
-    biteTimerFill.style.transition = `transform ${REEL_WINDOW_MS}ms linear`;
+    biteTimerFill.style.transition = transform ${REEL_WINDOW_MS}ms linear;
     biteTimerFill.style.transform = 'scaleX(0)';
  
     const timeoutId = setTimeout(() => resolveBite(false, true), REEL_WINDOW_MS);
@@ -222,7 +222,7 @@
     timeLeft -= 1;
     const m = Math.floor(timeLeft / 60);
     const s = String(timeLeft % 60).padStart(2,'0');
-    timeVal.textContent = `${m}:${s}`;
+    timeVal.textContent = ${m}:${s};
     timeChip.classList.toggle('warn', timeLeft <= 15);
     if (timeLeft <= 0) endGame();
   }
