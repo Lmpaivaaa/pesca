@@ -1,0 +1,231 @@
+:root{
+    --kelp:       #00ff37;
+    --danger:     #e4432d;
+    --gold:       #f2994a;
+    --panel-bg:   rgba(17, 17, 17, 0.75);
+    --panel-fg:   #fbf6e8;
+  }
+
+  *{ box-sizing:border-box; }
+
+html,body{
+  margin:0; padding:0; width:100%; height:100%;
+  overflow:hidden;
+  font-family:'Space Grotesk', sans-serif;
+  background:#000;
+  color:var(--panel-fg);
+  -webkit-user-select:none; user-select:none;
+}
+
+  .pixel{ font-family:'Press Start 2P', monospace; }
+
+ #stage{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  cursor:crosshair;
+}
+
+#cenario{
+  position:absolute; top:0; left:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  z-index:0; pointer-events:none;
+}
+
+
+
+
+  /* ---------- LINHA DA VARA (dinâmica, alvo do lançamento) ---------- */
+  #rodline{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    z-index:4; pointer-events:none; display:none;
+  }
+  #rodline line{ stroke:var(--line-gray); stroke-width:2.5; stroke-linecap:round; }
+
+  /* ---------- PESCADOR ---------- */
+  #angler{
+    position:absolute; left:54%; top:55%;
+    width:0; height:0;
+    transform:translate(14px, 6px);
+    z-index:5; pointer-events:none;
+  }
+  #angler img{
+    position:absolute;
+    bottom:0;
+    height:150px;
+    width:auto;
+    image-rendering:pixelated;
+    image-rendering:crisp-edges;
+  }
+  #angler img.pose-idle{ left:-39px; }
+  #angler img.pose-cast{ left:-88px; }
+  #angler img.pose-pull{ left:-125px; }
+
+  /* ---------- PONTOS (indicadores de bolhas — criados via JS) ---------- */
+  .spot{
+    position:absolute; width:56px; height:56px; transform:translate(-50%,-50%);
+    cursor:pointer; z-index:3;
+  }
+  .spot .bubble{
+    position:absolute; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,0.95), rgba(217,251,251,0.35) 60%, transparent 75%);
+    animation:rise 1.6s ease-in-out infinite;
+  }
+  .spot .b1{ width:14px; height:14px; left:18px; top:30px; animation-delay:0s; }
+  .spot .b2{ width:9px;  height:9px;  left:30px; top:18px; animation-delay:0.3s;}
+  .spot .b3{ width:6px;  height:6px;  left:10px; top:12px; animation-delay:0.6s;}
+  .spot .b4{ width:10px; height:10px; left:40px; top:36px; animation-delay:0.45s;}
+  @keyframes rise{
+    0%{ transform:translateY(0); opacity:0.9;}
+    100%{ transform:translateY(-14px); opacity:0.15;}
+  }
+  .spot.hot::after{
+    content:""; position:absolute; inset:0; border-radius:50%;
+    box-shadow:0 0 0 0 rgba(242,153,74,0.55);
+    animation:pulse 1s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(242,153,74,0.55);}
+    100%{ box-shadow:0 0 0 22px rgba(242,153,74,0);}
+  }
+
+  /* ---------- INTERFACE DA MORDIDA ---------- */
+  #bite-card{
+    position:absolute; z-index:10; transform:translate(-50%,-118%);
+    background:var(--panel-bg); border:2px solid rgba(255,255,255,0.18);
+    border-radius:10px; padding:10px 12px; min-width:150px;
+    backdrop-filter:blur(3px);
+    display:none;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  }
+  #bite-card.show{ display:block; }
+  #bite-shadow{
+    width:44px; height:26px; margin:0 auto 6px;
+    background:var(--fish);
+    -webkit-mask:radial-gradient(ellipse 55% 65% at 40% 50%, #000 60%, transparent 62%);
+    mask:radial-gradient(ellipse 55% 65% at 40% 50%, #000 60%, transparent 62%);
+    opacity:0.6;
+  }
+  #bite-shadow.suspicious{ width:52px; height:34px; background:var(--kraken); opacity:0.75; }
+  #bite-timer{
+    height:5px; border-radius:3px; background:rgba(255,255,255,0.18);
+    overflow:hidden; margin:6px 0 9px;
+  }
+  #bite-timer > div{ height:100%; background:var(--gold); width:100%; transform-origin:left; }
+  .bite-actions{ display:flex; gap:6px; }
+  .bite-btn{
+    flex:1; font-family:'Space Grotesk', sans-serif; font-weight:600;
+    font-size:12.5px; padding:7px 6px; border-radius:6px; border:none; cursor:pointer;
+  }
+  #btn-reel{ background:var(--kelp); color:#04231a; }
+  #btn-release{ background:transparent; color:var(--panel-fg); border:1.5px solid rgba(255,255,255,0.4); }
+  .bite-btn:active{ transform:scale(0.96); }
+
+  /* ---------- PAINEL (HUD) ---------- */
+  /* ---------- PAINEL (HUD) ---------- */
+  #hud{
+    position:absolute; top:20px; left:20px; right:20px; z-index:20;
+    display:flex; justify-content:space-between; align-items:flex-start;
+    pointer-events:none;
+  }
+  .hud-chip{
+    background:var(--panel-bg); border:2px solid rgba(255,255,255,0.18);
+    border-radius:12px; padding:14px 20px; pointer-events:auto;
+  }
+  #score-chip .label, #time-chip .label{ font-size:14px; opacity:0.75; margin-bottom:6px; }
+  #score-chip .value{ font-size:28px; color:var(--gold); }
+  #time-chip .value{ font-size:28px; }
+  #time-chip.warn .value{ color:var(--danger); }
+
+  /* ---------- LEGENDA ---------- */
+  #legend{
+    position:absolute; bottom:20px; left:20px; top:auto; z-index:20;
+    background:var(--panel-bg); border:2px solid rgba(255,255,255,0.18);
+    border-radius:12px; padding:16px 20px; font-size:18px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  #legend .row{ display:flex; align-items:center; gap:12px; }
+  .swatch-fish{ width:44px; height:auto; flex:none; image-rendering:pixelated; image-rendering:crisp-edges; }
+  .swatch-kraken{ width:44px; height:auto; flex:none; image-rendering:pixelated; image-rendering:crisp-edges; }
+
+  /* ---------- SOBREPOSIÇÕES ---------- */
+  .overlay{
+    position:absolute; inset:0; z-index:50;
+    background:linear-gradient(180deg, rgba(17,17,17,0.94), rgba(17,17,17,0.98));
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:24px;
+  }
+  .overlay.hidden{ display:none; }
+  .overlay h1{ font-size:20px; line-height:1.7; margin:0 0 6px; color:var(--panel-fg); }
+  .overlay h1 .accent{ color:var(--gold); }
+  .overlay p{ max-width:420px; font-size:14.5px; line-height:1.6; opacity:0.85; margin:14px 0 22px; }
+  .rules{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:22px; }
+  .rule-card{
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+    border-radius:10px; padding:12px 14px; width:150px; font-size:12.5px; line-height:1.5;
+  }
+  .rule-card .icon{ font-size:22px; margin-bottom:6px; }
+  .cta{
+    font-family:'Press Start 2P', monospace; font-size:13px;
+    background:var(--gold); color:#2b1600; border:none;
+    padding:16px 28px; border-radius:8px; cursor:pointer;
+    box-shadow:0 6px 0 #b56f2a;
+  }
+  .cta:active{ transform:translateY(4px); box-shadow:0 2px 0 #b56f2a; }
+  #final-score{ font-size:34px; margin:10px 0 4px; }
+  #final-caught{ font-size:12px; opacity:0.7; margin-bottom:20px; display:flex; align-items:center; gap:6px; }
+  .final-fish{ width:30px; height:auto; image-rendering:pixelated; image-rendering:crisp-edges; }
+
+  .toast{
+    position:absolute; z-index:15; transform:translate(-50%,-50%);
+    font-family:'Press Start 2P', monospace; font-size:14px;
+    pointer-events:none; text-shadow:2px 2px 0 rgba(0,0,0,0.4);
+    animation:toastUp 0.9s ease-out forwards;
+  }
+  .toast.good{ color:var(--kelp); }
+  .toast.bad{ color:var(--danger); }
+  .toast.neutral{ color:#222; font-size:11px; }
+  @keyframes toastUp{
+    0%{ opacity:0; transform:translate(-50%,-40%) scale(0.8); }
+    20%{ opacity:1; transform:translate(-50%,-70%) scale(1); }
+    100%{ opacity:0; transform:translate(-50%,-140%) scale(1); }
+  }
+
+  .catch-fish{
+    position:absolute; z-index:14; width:64px; height:auto;
+    transform:translate(-50%,-50%) rotate(-8deg);
+    pointer-events:none; image-rendering:pixelated; image-rendering:crisp-edges;
+    animation:fishJump 0.9s ease-out forwards;
+  }
+  @keyframes fishJump{
+    0%{ opacity:0; transform:translate(-50%,-20%) scale(0.5) rotate(0deg); }
+    35%{ opacity:1; transform:translate(-50%,-115%) scale(1.05) rotate(-14deg); }
+    70%{ opacity:1; transform:translate(-50%,-95%) scale(1) rotate(8deg); }
+    100%{ opacity:0; transform:translate(-50%,-70%) scale(0.9) rotate(0deg); }
+  }
+
+  .catch-kraken{
+    position:absolute; z-index:14; width:96px; height:auto;
+    transform:translate(-50%,-50%);
+    pointer-events:none; image-rendering:pixelated; image-rendering:crisp-edges;
+    animation:krakenSpook 0.9s ease-out forwards;
+  }
+  @keyframes krakenSpook{
+    0%{ opacity:0; transform:translate(-50%,-10%) scale(0.4); }
+    30%{ opacity:1; transform:translate(-50%,-90%) scale(1.15); }
+    38%{ transform:translate(calc(-50% - 6px),-90%) scale(1.15); }
+    46%{ transform:translate(calc(-50% + 6px),-90%) scale(1.15); }
+    54%{ transform:translate(calc(-50% - 4px),-90%) scale(1.1); }
+    62%{ transform:translate(calc(-50% + 4px),-90%) scale(1.1); }
+    100%{ opacity:0; transform:translate(-50%,-75%) scale(0.85); }
+  }
+
+  @media (max-width:520px){
+    .rules{ gap:8px; }
+    .rule-card{ width:118px; padding:10px; font-size:11px; }
+    #legend{ font-size:9.5px; padding:7px 9px; top:70px; }
+    .overlay h1{ font-size:16px; }
+    #angler{ width:88px; height:110px; }
+  }

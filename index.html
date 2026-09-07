@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BASS PRÓ — Jogo de Pesca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="stage">
+
+  <img id="cenario" src="cenario.jpg" alt="Cenário">
+
+  <svg id="rodline"><line id="line-el" x1="0" y1="0" x2="0" y2="0"></line></svg>
+
+  <div id="angler">
+    <img id="angler-img" src="angler-idle.png" class="pose-idle" alt="Pescador">
+  </div>
+
+  <div id="bite-card">
+    <div id="bite-shadow"></div>
+    <div id="bite-timer"><div id="bite-timer-fill"></div></div>
+    <div class="bite-actions">
+      <button class="bite-btn" id="btn-reel">PUXAR</button>
+      <button class="bite-btn" id="btn-release">SOLTAR</button>
+    </div>
+  </div>
+
+  <div id="hud">
+    <div class="hud-chip" id="score-chip">
+      <div class="label pixel">PONTUAÇÃO</div>
+      <div class="value pixel" id="score-val">0</div>
+    </div>
+    <div class="hud-chip" id="time-chip">
+      <div class="label pixel">TEMPO</div>
+      <div class="value pixel" id="time-val">2:00</div>
+    </div>
+  </div>
+
+  <div id="legend">
+    <div class="row"><img class="swatch-fish" src="peixe 1.png" alt=""> Peixe · +1</div>
+    <div class="row"><img class="swatch-kraken" src="kraken 1.png" alt=""> Kraken · −3</div>
+  </div>
+
+  <div class="overlay" id="start-overlay">
+    <h1 class="pixel">MARÉ&nbsp;ALTA<br><span class="accent">PESCA&nbsp;OU&nbsp;FUJA</span></h1>
+    <p>Clique nas bolhas do mar para lançar a vara. Espere a mordida e decida: puxar ou soltar. Você tem 2 minutos para somar o máximo de pontos — mas cuidado com o que se esconde nas profundezas.</p>
+    <div class="rules">
+      <div class="rule-card"><div class="icon">🎣</div>Clique numa mancha de bolhas no mar para lançar a linha</div>
+      <div class="rule-card"><div class="icon">⏳</div>Depois da mordida, você tem 5s para puxar</div>
+      <div class="rule-card"><div class="icon">🐟</div>Peixe = +1 ponto</div>
+      <div class="rule-card"><div class="icon">🐙</div>Sombra estranha? Pode ser um Kraken (−3)</div>
+    </div>
+    <button class="cta" id="btn-start">COMEÇAR</button>
+  </div>
+
+  <div class="overlay hidden" id="end-overlay">
+    <h1 class="pixel">TEMPO&nbsp;ESGOTADO</h1>
+    <div class="pixel" id="final-score">0</div>
+    <div id="final-caught"><img class="final-fish" src="peixe.png" alt="">peixes capturados</div>
+    <button class="cta" id="btn-restart">PESCAR DE NOVO</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
