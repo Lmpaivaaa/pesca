@@ -138,7 +138,7 @@
     biteTimerFill.style.transition = 'none';
     biteTimerFill.style.transform = 'scaleX(1)';
     void biteTimerFill.offsetWidth;
-    biteTimerFill.style.transition = transform ${REEL_WINDOW_MS}ms linear;
+    biteTimerFill.style.transition = `transform ${REEL_WINDOW_MS}ms linear`;
     biteTimerFill.style.transform = 'scaleX(0)';
  
     const timeoutId = setTimeout(() => resolveBite(false, true), REEL_WINDOW_MS);
@@ -190,7 +190,7 @@
 
   function showCaughtFish(x, y){
     const f = document.createElement('img');
-    f.src = 'peixe.png';
+    f.src = 'peixe 1.png';
     f.className = 'catch-fish';
     f.alt = '';
     f.style.left = x + 'px';
@@ -201,7 +201,7 @@
 
   function showCaughtKraken(x, y){
     const k = document.createElement('img');
-    k.src = 'kraken.png';
+    k.src = 'kraken 1.png';
     k.className = 'catch-kraken';
     k.alt = '';
     k.style.left = x + 'px';
@@ -222,7 +222,7 @@
     timeLeft -= 1;
     const m = Math.floor(timeLeft / 60);
     const s = String(timeLeft % 60).padStart(2,'0');
-    timeVal.textContent = ${m}:${s};
+    timeVal.textContent = `${m}:${s}`;
     timeChip.classList.toggle('warn', timeLeft <= 15);
     if (timeLeft <= 0) endGame();
   }
